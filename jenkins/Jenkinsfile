@@ -4,8 +4,8 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 git branch: 'main',
-    credentialsId: 'github-token',  // This is the ID from Jenkins credentials
-    url: 'https://github.com/ThePoojaDas/ci-cd-webapp.git'
+            credentialsId: 'github-token',  // This should match the ID in Jenkins
+            url: 'https://github.com/ThePoojaDas/ci-cd-webapp.git'
 
             }
         }
