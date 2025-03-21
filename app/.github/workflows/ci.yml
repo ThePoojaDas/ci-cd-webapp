@@ -1,30 +1,40 @@
 name: CI Pipeline  # Name of the workflow
 
-on:  
-  push:  
-    branches:  
+on:
+  push:
+    branches:
       - main  # Runs this workflow when code is pushed to the main branch
-  pull_request:  
-    branches:  
+  pull_request:
+    branches:
       - main  # Also runs when a pull request is made
 
-jobs:  
-  build:  
+jobs:
+  build:
     runs-on: ubuntu-latest  # Runs on a Linux machine
 
-    steps:  
-      - name: Checkout Repository  
+    steps:
+      - name: Checkout Repository
         uses: actions/checkout@v3  # Gets your code from GitHub  
 
-      - name: Set up Python  
-        uses: actions/setup-python@v4  
-        with:  
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
           python-version: '3.9'  # Installs Python 3.9  
 
-      - name: Install Dependencies  
+      - name: Install Dependencies
         run: |  
           pip install -r app/requirements.txt  # Installs required dependencies  
 
-      - name: Run Tests  
-        run: |  
+      - name: Run Tests
+        run: |
           pytest app/tests/  # Runs automated tests
+
+      # ✅ ADD DOCKER BUILD AND PUSH
+      - name: Log in to DockerHub
+        run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      - name: Build Docker Image
+        run: docker build -t your-dockerhub-username/ci-cd-webapp:latest .
+
+      - name: Push Docker Image
+        run: docker push your-dockerhub-username/ci-cd-webapp:latest
