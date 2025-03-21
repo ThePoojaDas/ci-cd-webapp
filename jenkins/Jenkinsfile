@@ -3,7 +3,10 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/your-repo/ci-cd-webapp.git'
+                git branch: 'main',
+    credentialsId: 'github-token',  // This is the ID from Jenkins credentials
+    url: 'https://github.com/ThePoojaDas/ci-cd-webapp.git'
+
             }
         }
         stage('Build Docker Image') {
